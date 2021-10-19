@@ -2,7 +2,6 @@ import torch
 import logging
 import torch.nn as nn
 from model_utils import *
-logger = logging.getLogger(__name__)
 
 
 class Xvector(nn.Module):
@@ -92,7 +91,6 @@ class Classifier(Sequential):
                 BatchNorm1d, layer_name="norm"
             )
 
-        # Final Softmax classifier
         self.append(
            Linear, n_neurons=out_neurons, layer_name="out"
         )
