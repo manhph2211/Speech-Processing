@@ -62,17 +62,16 @@ def submission(save_file, classifier, feature_extractor, n_mfcc, max_sequence_le
 
 
 def main(hyper_params,ckpt1 = '../ckpt/xvec.pth',ckpt2='../ckpt/classify.pth'):
-
 	device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 	feature_extractor = Xvector(in_channels = hyper_params['in_channels'], lin_neurons = hyper_params['lin_neurons'])
 	classifier = Classifier(input_shape=(2,1,2 * hyper_params['lin_neurons']),out_neurons = 2) 
-
 	feature_extractor = feature_extractor.to(device)
 	classifier = classifier.to(device)
+
 	feature_extractor.load_state_dict(torch.load(ckpt1,map_location=torch.device('cpu')))
 	classifier.load_state_dict(torch.load(ckpt2,map_location=torch.device('cpu')))
-	submission('results.txt', classifier, feature_extractor, hyper_params["n_mfcc"], hyper_params["max_sequence_len"], hyper_params["sample_rate"], device, limit = 20)
+	submission('results.txt', classifier, feature_extractor, hyper_params["n_mfcc"], hyper_params["max_sequence_len"], hyper_params["sample_rate"], device, limit = hyper_params["limit"])
 
 
 if __name__ == '__main__':
@@ -83,6 +82,7 @@ if __name__ == '__main__':
 	parser.add_argument('--sample_rate', type= int , default=16000, help='sample rate')
 	parser.add_argument('--in_channels', type= int , default=40, help='numbers of in_channels - xvector')
 	parser.add_argument('--lin_neurons', type= int , default=512, help='numbers of hidden in_channels - xvector')
+	parser.add_argument('--limit', type= int , default=200, help='numbers of predictions')
 
 	args = vars(parser.parse_args())
 	main(args)
