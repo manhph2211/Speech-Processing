@@ -16,6 +16,8 @@ import pandas as pd
 import os  
 import random
 import glob
+import warnings
+warnings.simplefilter("ignore", UserWarning)
 
 
 def predict(file1,file2,classifier,feature_extractor,n_mfcc, max_sequence_len, sample_rate, device):
@@ -43,23 +45,23 @@ def predict(file1,file2,classifier,feature_extractor,n_mfcc, max_sequence_len, s
     return predict_
 
 
-def submission(save_file, classifier, feature_extractor, n_mfcc, max_sequence_len, sample_rate, device = 'cpu', limit = 5, csv_public_test='../../data/Train-Test-Data/public-test.csv',test_wave_folder = '../..data/Train-Test-Data/public-test'):
-	test_files = pd.read_csv(csv_public_test)
+def submission(save_file, classifier, feature_extractor, n_mfcc, max_sequence_len, sample_rate, device = 'cpu', limit = 5, csv_test_file='../../data/private-test.csv',test_wave_folder = '../../data/private-test'):
+	test_files = pd.read_csv(csv_test_file)
 	test_files['audio_1'] = test_files['audio_1'].apply(lambda x: os.path.join(test_wave_folder, x))
 	test_files['audio_2'] = test_files['audio_2'].apply(lambda x: os.path.join(test_wave_folder, x))
 	results = []
 	with open(save_file,'w') as f:
 	    for i,(file1,file2) in enumerate(tqdm(zip(test_files['audio_1'].to_numpy(),test_files['audio_2'].to_numpy()))):
 	      out = predict(file1, file2, classifier, feature_extractor, n_mfcc, max_sequence_len, sample_rate, device)
-	      file1 = file1.split('/')[-2]
-	      file2 = file2.split('/')[-2]
+	      file1 = file1.split('/')[-1]
+	      file2 = file2.split('/')[-1]
 	      results.append(out)
 	      if i == limit:
 	        break
-	      f.write(file1 +','+ file2 +','+ str(out) + ' \n')
+	      f.write(file1 +','+ file2 +','+ str(out.detach().cpu().numpy()[0]) + ' \n')
 
 
-def main(hyper_params):
+def main(hyper_params,ckpt1 = '../ckpt/xvec.pth',ckpt2='../ckpt/classify.pth'):
 
 	device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -68,8 +70,9 @@ def main(hyper_params):
 
 	feature_extractor = feature_extractor.to(device)
 	classifier = classifier.to(device)
-
-	submission('results.txt', classifier, feature_extractor, hyper_params["n_mfcc"], hyper_params["max_sequence_len"], hyper_params["sample_rate"], device)
+	feature_extractor.load_state_dict(torch.load(ckpt1,map_location=torch.device('cpu')))
+	classifier.load_state_dict(torch.load(ckpt2,map_location=torch.device('cpu')))
+	submission('results.txt', classifier, feature_extractor, hyper_params["n_mfcc"], hyper_params["max_sequence_len"], hyper_params["sample_rate"], device, limit = 20)
 
 
 if __name__ == '__main__':

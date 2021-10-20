@@ -1,8 +1,8 @@
 import torch 
 import torch.nn as nn 
-from sklearn.metrics import accuracy_score
 import warnings
 from tqdm import tqdm
+from sklearn.metrics import accuracy_score
 import numpy as np
 warnings.simplefilter("ignore", UserWarning)
 
