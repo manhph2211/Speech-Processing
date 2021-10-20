@@ -3,7 +3,7 @@ import torch.nn as nn
 import inspect
 import operator
 import functools
-
+import torch.nn.functional as F
 
 class Softmax(nn.Module):
 

@@ -1,14 +1,16 @@
+from comet_ml import Experiment
 import os
 import glob
 import librosa
 import librosa.display
+import torchaudio
+import torchaudio.transforms as tf
 import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 import random 
 import json
-from split_waves import split
-from features import get_mfcc_features
+from features import get_mfcc_features,augment_wav
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -51,11 +53,23 @@ def show_frequency_domain(features):
 if __name__ == '__main__':
 
   DATA_ROOT = '../../data/Train-Test-Data/dataset'
-  subject_folders = os.listdir(DATA_ROOT) # 400 subjects (speakers)
-  total_wav_files = glob.glob(os.path.join(DATA_ROOT,'*/*.wav')) # 4K files ?, It should be 10k LOL
+  subject_folders = os.listdir(DATA_ROOT)
+  total_wav_files = glob.glob(os.path.join(DATA_ROOT,'*/*.wav')) 
   file = total_wav_files[0]
   listen(file)
-  show_time_domain(file)
-  mfccs = get_mfcc_features(file)
-  show_frequency_domain(mfccs)
-  # split_waves(subject_folders, time_len = 1500)
+  # show_time_domain(file)
+  val_mfccs = get_mfcc_features(file,mode="val")
+  train_mfccs = get_mfcc_features(file,mode="train")
+  # show_frequency_domain(mfccs)
+  experiment = Experiment(
+      api_key="qEseycgDNNW4vbWOXXm0ctQYo",
+      project_name="Speaker Verification",
+      workspace="maxph2211",
+  )
+  experiment.log_dataset_info("dataset",DATA_ROOT)
+  experiment.log_image(val_mfccs, name = "mfcc")
+  experiment.log_image(train_mfccs, name = "augmented_mfcc") 
+  experiment.log_audio(file)
+  mes = f"There are {len(subject_folders)} subjects and {len(total_wav_files)} waves file in total"
+  experiment.log_other("General info",mes)
+  

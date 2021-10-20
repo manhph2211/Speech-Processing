@@ -1,5 +1,5 @@
 from torch.nn import Module
-from torch.nn.functional as F 
+import torch.nn.functional as F 
 import torch  
 
 
