@@ -1,8 +1,11 @@
+comet_ml
+pandas
 matplotlib
 numpy
 torch
 torchaudio
 librosa
 pydub
+tqdm
 tqdm
 flask
