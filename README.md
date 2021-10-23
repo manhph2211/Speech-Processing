@@ -3,20 +3,14 @@ Voice-Vertification :smiley:
 
 # Introduction
 
-- This project bala ... 
-- Thanks to ...
 
 ## MFCC
 
-- Well, MFCC is ...
 
 ## Xvector
 
-- Features ...
 
 ## Simease 
-
-- For ...
 
 # Dataset
 
@@ -28,13 +22,13 @@ Voice-Vertification :smiley:
 
 ```
 
-- For splitting wave files into Xsecond-files:  ** python3 utils.py --length X --save_folder splitaudio **
+- Looking through the data ** python3 utils.py **
 
-- For making dataset before training: ** python3 dataset.py --test_size 0.2 --save_train_json ../data/train.json --save_val_json ../data/val.json
+- For preparing dataset brefore training:  ** python3 build_data.py  --data_root  --training_pairs --max_wav_len **
 
-- For training ** python3 train.py --embedding_type 'mfcc' --add_aug True --max_len 40 --up_channels False --resize None --bs 64 --n_epoch 300 --lr 0.0001 --lin_neurons 512**   
+- For training ** python3 train.py --n_mfcc --sample_rate --batch_size 64 --epoch_n --lin_neurons**   
 
-- For testing: ** python3 test.py -save_txt result.txt**
+- For testing: ** python3 predict.py --limit **
 
 ```
 
