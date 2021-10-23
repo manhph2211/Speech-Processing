@@ -3,12 +3,8 @@ import os
 import glob
 import librosa
 import librosa.display
-import torchaudio
-import torchaudio.transforms as tf
 import matplotlib.pyplot as plt
 import numpy as np
-from tqdm import tqdm
-import random 
 import json
 from features import get_mfcc_features,augment_wav
 from pydub import AudioSegment
@@ -28,7 +24,7 @@ def write_json(file,data):
 
 def get_prefix(file):
   split = file.split('/')
-  return '/'.join(split[:-1]),split[-3]
+  return '/'.join(split[:-1]),split[-2]
 
 
 def listen(file):

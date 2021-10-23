@@ -1,3 +1,4 @@
+from comet_ml import Experiment
 import torch
 import sys
 sys.path.append("../utils")
@@ -45,7 +46,7 @@ def predict(file1,file2,classifier,feature_extractor,n_mfcc, max_sequence_len, s
     return predict_
 
 
-def submission(save_file, classifier, feature_extractor, n_mfcc, max_sequence_len, sample_rate, device = 'cpu', limit = 5, csv_test_file='../../data/private-test.csv',test_wave_folder = '../../data/private-test'):
+def submission(save_file, experiment, classifier, feature_extractor, n_mfcc, max_sequence_len, sample_rate, device = 'cpu', limit = 5, csv_test_file='../../data/private-test.csv',test_wave_folder = '../../data/private-test'):
 	test_files = pd.read_csv(csv_test_file)
 	test_files['audio_1'] = test_files['audio_1'].apply(lambda x: os.path.join(test_wave_folder, x))
 	test_files['audio_2'] = test_files['audio_2'].apply(lambda x: os.path.join(test_wave_folder, x))
@@ -53,6 +54,10 @@ def submission(save_file, classifier, feature_extractor, n_mfcc, max_sequence_le
 	with open(save_file,'w') as f:
 	    for i,(file1,file2) in enumerate(tqdm(zip(test_files['audio_1'].to_numpy(),test_files['audio_2'].to_numpy()))):
 	      out = predict(file1, file2, classifier, feature_extractor, n_mfcc, max_sequence_len, sample_rate, device)
+	      mes = str(out.detach().cpu().numpy())
+	      experiment.log_audio(audio_data = file1, file_name=f"Pair {i+1} - {mes}")
+	      experiment.log_audio(audio_data = file2, file_name=f"Pair {i+1} - {mes}")
+	      # experiment.log_other(f"Pair {i+1}",str(out.detach().cpu().numpy()))
 	      file1 = file1.split('/')[-1]
 	      file2 = file2.split('/')[-1]
 	      results.append(out)
@@ -65,13 +70,18 @@ def main(hyper_params,ckpt1 = '../ckpt/xvec.pth',ckpt2='../ckpt/classify.pth'):
 	device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 	feature_extractor = Xvector(in_channels = hyper_params['in_channels'], lin_neurons = hyper_params['lin_neurons'])
-	classifier = Classifier(input_shape=(2,1,2 * hyper_params['lin_neurons']),out_neurons = 2) 
+	classifier = Classifier(input_shape=(64,1,2 * hyper_params['lin_neurons']),out_neurons = 2) 
 	feature_extractor = feature_extractor.to(device)
 	classifier = classifier.to(device)
 
 	feature_extractor.load_state_dict(torch.load(ckpt1,map_location=torch.device('cpu')))
 	classifier.load_state_dict(torch.load(ckpt2,map_location=torch.device('cpu')))
-	submission('results.txt', classifier, feature_extractor, hyper_params["n_mfcc"], hyper_params["max_sequence_len"], hyper_params["sample_rate"], device, limit = hyper_params["limit"])
+	experiment = Experiment(
+	    api_key="qEseycgDNNW4vbWOXXm0ctQYo",
+	    project_name="Speaker Verification",
+	    workspace="maxph2211",
+	)
+	submission('results.txt', experiment, classifier, feature_extractor, hyper_params["n_mfcc"], hyper_params["max_sequence_len"], hyper_params["sample_rate"], device, limit = hyper_params["limit"])
 
 
 if __name__ == '__main__':

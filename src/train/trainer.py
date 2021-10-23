@@ -17,6 +17,7 @@ import argparse
 
 def training_experiment(train_loader,test_loader,experiment,trainer,epoch_n,scheduler1,scheduler2):
 	BEST_LOSS = np.inf
+	print("BEGIN TRAINING ...")
 	for epoch in range(epoch_n):
 	    with experiment.train():
 	      mean_train_acc, train_loss_epoch = trainer.train_epoch(train_loader)
@@ -36,6 +37,7 @@ def training_experiment(train_loader,test_loader,experiment,trainer,epoch_n,sche
 	      }, epoch=epoch)
 	    
 	    print("EPOCH: ", epoch+1," - TRAIN_LOSS: ", train_loss_epoch," - TRAIN_ACC: ",mean_train_acc, " || VAL_LOSS: ", val_loss_epoch, " - VAL_ACC: ", mean_val_acc)
+
 
 
 def train(hyper_params):
@@ -68,7 +70,7 @@ def train(hyper_params):
 	scheduler2 = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer2, factor=0.8, patience=3, verbose=True)
 	
 	train_loader,test_loader = get_loader(hyper_params["batch_size"],hyper_params["worker_n"],hyper_params["max_sequence_len"], hyper_params["sample_rate"], hyper_params["n_mfcc"], TRAIN_FILE,VAL_FILE)
-	trainer = Trainer(feature_extractor,classifier,criterion1,criterion2,optimizer1,optimizer2,hyper_params["loss_ratio"],hyper_params["clip_value"],device)
+	trainer = Trainer(feature_extractor,classifier,criterion1,criterion2,optimizer1,optimizer2,hyper_params["loss_ratio"],hyper_params["clip_value"],device=device)
 
 	training_experiment(train_loader,test_loader,experiment,trainer,hyper_params['epoch_n'],scheduler1,scheduler2)
 

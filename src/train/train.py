@@ -23,13 +23,15 @@ class Trainer:
       self.BEST_LOSS = np.inf
       self.ckpt1 = ckpt1
       self.ckpt2 = ckpt2
+      self.labels = []
+      self.predicts = []
       self.load_weights()
 
     def load_weights(self):
       try:
         self.feature_extractor.load_state_dict(torch.load(self.ckpt1))
         self.classifier.load_state_dict(torch.load(self.ckpt2))
-        print("SUCCESSFULLY LOAD TRAINED MODELS")
+        print("SUCCESSFULLY LOAD TRAINED MODELS !")
       except:
         print('FIRST TRAINING >>>')
 
@@ -83,6 +85,9 @@ class Trainer:
           loss = loss1 * self.loss_ratio + loss2 
           val_loss_epoch+=loss.item()
           _, predict = out.max(dim=1)
+
+          self.labels.append(label.squeeze(dim=1).detach().cpu().numpy())
+          self.predicts.append(predict.detach().cpu().numpy())
           val_acc_epoch.append(accuracy_score(predict.cpu().numpy(), label.cpu().numpy()))
         self.val_loss_epoch = val_loss_epoch
         return sum(val_acc_epoch)/len(val_acc_epoch), val_loss_epoch
@@ -90,7 +95,10 @@ class Trainer:
     def save_checkpoint(self,experiment):
       if self.val_loss_epoch < self.BEST_LOSS:
         self.BEST_LOSS = self.val_loss_epoch
-        torch.save(self.feature_extractor.state_dict(),self.ckpt1)
-        torch.save(self.classifier.state_dict(),self.ckpt2)
-        experiment.log_model("xvector model",self.ckpt1)
-        experiment.log_model("classifier model",self.ckpt2)
+        # torch.save(self.feature_extractor.state_dict(),self.ckpt1)
+        # torch.save(self.classifier.state_dict(),self.ckpt2)
+        # experiment.log_model("xvector model",self.ckpt1)
+        # experiment.log_model("classifier model",self.ckpt2)
+        experiment.log_confusion_matrix(y_true=[j for sub in self.labels for j in sub], y_predicted=[j for sub in self.predicts for j in sub])
+        print("LOG CONFUSION MATRIX")
+
