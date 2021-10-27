@@ -47,7 +47,7 @@ def train(hyper_params):
 	VAL_FILE='../../data/test_data.json'	
 
 	experiment = Experiment(
-	    api_key="qEseycgDNNW4vbWOXXm0ctQYo",
+	    api_key="",
 	    project_name="Speaker Verification",
 	    workspace="maxph2211",
 	)

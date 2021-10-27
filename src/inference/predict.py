@@ -77,7 +77,7 @@ def main(hyper_params,ckpt1 = '../ckpt/xvec.pth',ckpt2='../ckpt/classify.pth'):
 	feature_extractor.load_state_dict(torch.load(ckpt1,map_location=torch.device('cpu')))
 	classifier.load_state_dict(torch.load(ckpt2,map_location=torch.device('cpu')))
 	experiment = Experiment(
-	    api_key="qEseycgDNNW4vbWOXXm0ctQYo",
+	    api_key="",
 	    project_name="Speaker Verification",
 	    workspace="maxph2211",
 	)

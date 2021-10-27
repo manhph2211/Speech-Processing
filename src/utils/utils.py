@@ -58,7 +58,7 @@ if __name__ == '__main__':
   train_mfccs = get_mfcc_features(file,mode="train")
   # show_frequency_domain(mfccs)
   experiment = Experiment(
-      api_key="qEseycgDNNW4vbWOXXm0ctQYo",
+      api_key="",
       project_name="Speaker Verification",
       workspace="maxph2211",
   )
