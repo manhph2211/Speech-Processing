@@ -5,7 +5,7 @@ Voice-Vertification :smiley:
 
 ## Feature Extractor
 
-### STFT
+### STFT 
 
 ### Mel Spec
 
@@ -20,6 +20,8 @@ Voice-Vertification :smiley:
 ### D-vector 
 
 ### X-vector
+
+### Wav2vec
 
 ## Backend model
 
@@ -56,4 +58,16 @@ Voice-Vertification :smiley:
 
   - For testing: `` python3 predict.py --limit ``
 
+# References
 
+- Lots of useful tutroials [Youtube Channel](https://www.youtube.com/c/ValerioVelardoTheSoundofAI)
+- Paper GMM [pdf](https://maelfabien.github.io/machinelearning/Speech1/#limits-of-gmm-ubm)
+- Paper Adaptive GMM [pdf](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.117.338&rep=rep1&type=pdf)
+- Paper JFA [pdf](https://www1.icsi.berkeley.edu/Speech/presentations/AFRL_ICSI_visit2_JFA_tutorial_icsitalk.pdf)
+- Paper I vector [pdf](http://groups.csail.mit.edu/sls/archives/root/publications/2010/Dehak_IEEE_Transactions.pdf) 
+- Paper D vector [pdf](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41939.pdf)
+- Paper X vector [pdf](https://www.danielpovey.com/files/2018_icassp_xvectors.pdf)
+- Paper attention backend with x vector [](https://arxiv.org/pdf/2104.01541.pdf)
+- Wav2vec [pdf](https://huggingface.co/transformers/model_doc/wav2vec2.html)
+- Ge2e Loss Paper [pdf](https://arxiv.org/pdf/1710.10467.pdf)
+- Vggvox Paper [pdf](https://arxiv.org/pdf/1806.05622.pdf)
