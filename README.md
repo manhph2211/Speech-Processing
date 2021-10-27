@@ -37,8 +37,6 @@ Voice-Vertification :smiley:
 
 ### GE2E loss
 
-
-
 # Dataset
 
 - Data can be found at [link](https://drive.google.com/file/d/1oT_cvFRDLha0E0Yh66zKRrisGgIbgjmZ/view?usp=sharing)
@@ -67,7 +65,7 @@ Voice-Vertification :smiley:
 - Paper I vector [pdf](http://groups.csail.mit.edu/sls/archives/root/publications/2010/Dehak_IEEE_Transactions.pdf) 
 - Paper D vector [pdf](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41939.pdf)
 - Paper X vector [pdf](https://www.danielpovey.com/files/2018_icassp_xvectors.pdf)
-- Paper attention backend with x vector [](https://arxiv.org/pdf/2104.01541.pdf)
+- Paper attention backend with x vector [pdf](https://arxiv.org/pdf/2104.01541.pdf)
 - Wav2vec [pdf](https://huggingface.co/transformers/model_doc/wav2vec2.html)
 - Ge2e Loss Paper [pdf](https://arxiv.org/pdf/1710.10467.pdf)
 - Vggvox Paper [pdf](https://arxiv.org/pdf/1806.05622.pdf)
