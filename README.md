@@ -3,18 +3,39 @@ Voice-Vertification :smiley:
 
 # Introduction
 
+## Feature Extractor
 
-## MFCC
+### STFT
 
-## GMM
+### Mel Spec
 
-## I-vector 
+### MFCC
 
-## D-vector + Cosin Similarity 
+### GMM and GMM-UBM
 
-## X-vector + Contrast + BCE
+### JFA
 
-## X-vector + Attention Backend + GEE + BCE
+### I-vector 
+
+### D-vector 
+
+### X-vector
+
+## Backend model
+
+### VggVox
+
+### Attention Backend
+
+## Loss Functions
+
+### Contrastive Loss
+
+### Triplet Loss
+
+### GE2E loss
+
+
 
 # Dataset
 
